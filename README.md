@@ -11,7 +11,7 @@ h1 {
 }
 ```
 
-The piecewise mixin takes six arguments:
+The `piecewise()` mixin takes six arguments:
 1. a CSS property;
 2. the minimum 
 3. and maximum desired values of that property (in px);

@@ -25,6 +25,9 @@
     "url": "https://github.com/piecewisecss/piecewisecss/issues"
   },
   "homepage": "https://github.com/piecewisecss/piecewisecss#readme",
+  "dependencies": {
+    "breakpoint-sass": "^2.7.1"
+  },
   "devDependencies": {
     "breakpoint-sass": "^2.7.1"
   }
