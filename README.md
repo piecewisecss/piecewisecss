@@ -12,12 +12,12 @@ h1 {
 ```
 
 The piecewise mixin takes six arguments:
-1. a CSS property,
+1. a CSS property;
 2. the minimum 
-3. and maximum desired values of that property (in px),
+3. and maximum desired values of that property (in px);
 4. the browser widths, beneath
-5. and above which those values will be applied
-6. and an optional appender argument for values such as !important.
+5. and above which those values will be applied;
+6. and an optional appender argument for values such as `!important`.
 
 In the example above, the `<h1>` tag will have:
 * a `font-size` of `24px` at and below a browser width of `480px`,
