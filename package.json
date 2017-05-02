@@ -1,6 +1,6 @@
 {
   "name": "piecewisecss",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "A simple scss mixin for easy implementation of linear piecewise css value functions.",
   "main": "index.js",
   "scripts": {
