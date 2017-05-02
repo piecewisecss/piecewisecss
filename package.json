@@ -1,0 +1,31 @@
+{
+  "name": "piecewisecss",
+  "version": "1.0.1",
+  "description": "A simple scss mixin for easy implementation of linear piecewise css value functions.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/piecewisecss/piecewisecss.git"
+  },
+  "keywords": [
+    "css",
+    "piecewise",
+    "linear",
+    "sass",
+    "scss",
+    "mixin",
+    "responsive"
+  ],
+  "author": "John Fiorilla",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/piecewisecss/piecewisecss/issues"
+  },
+  "homepage": "https://github.com/piecewisecss/piecewisecss#readme",
+  "devDependencies": {
+    "breakpoint-sass": "^2.7.1"
+  }
+}
