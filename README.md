@@ -20,6 +20,6 @@ The piecewise mixin takes six arguments:
 6. and an optional appender argument for values such as `!important`.
 
 In the example above, the `<h1>` tag will have:
-* a `font-size` of `24px` at and below a browser width of `480px`;
-* a `font-size` of `48px` at and above a browser width of `1200px`;
+* a `font-size` of `24px` at browser width <= `480px`;
+* a `font-size` of `48px` at browser width >= `1200px`;
 * between `480px` and `1200px`, the font-size will be scaled linearly with the browser width, resulting in smooth, cojoining media queries and breakpoints.
