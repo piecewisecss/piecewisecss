@@ -24,8 +24,7 @@
     @if nth($smallSize, $i) != nth($largeSize, $i) {
       $calcsList: append(
         $calcsList,
-        calc(
-          #{pixelize(nth($smallSize, $i))} + (100vw - #{pixelize($pxMin)})/#{(
+        calc(#{pixelize(nth($smallSize, $i))} + (100vw - #{pixelize($pxMin)})/#{(
               $pxMax - $pxMin
             )/(nth($largeSize, $i) - nth($smallSize, $i))}
         )
