@@ -1,7 +1,8 @@
 {
   "name": "piecewisecss",
   "version": "1.0.2",
-  "description": "A simple scss mixin for easy implementation of linear piecewise css value functions.",
+  "description":
+    "A SCSS @mixin for easy implementation of dynamic breakpoints.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -17,7 +18,9 @@
     "sass",
     "scss",
     "mixin",
-    "responsive"
+    "responsive",
+    "responsive design",
+    "design"
   ],
   "author": "John Fiorilla",
   "license": "ISC",
@@ -25,10 +28,6 @@
     "url": "https://github.com/piecewisecss/piecewisecss/issues"
   },
   "homepage": "https://github.com/piecewisecss/piecewisecss#readme",
-  "dependencies": {
-    "breakpoint-sass": "^2.7.1"
-  },
-  "devDependencies": {
-    "breakpoint-sass": "^2.7.1"
-  }
+  "dependencies": {},
+  "devDependencies": {}
 }

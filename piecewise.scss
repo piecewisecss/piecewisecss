@@ -1,24 +1,53 @@
-@import '~breakpoint-sass';
+@mixin piecewise($prop, $smallSize, $largeSize, $pxMin, $pxMax, $i:null) {
+  @if (length($smallSize) != length($largeSize)) {
+    @error 'Property values must have the same number of arguments.';
+  }
+  $smWidth: pixelize($pxMin);
+  $lgWidth: pixelize($pxMax);
+  @media (min-width: $lgWidth) {
+    #{$prop}: pixelize($largeSize) $i;
+  }
+  @media (min-width: $smWidth) and (max-width: $lgWidth) {
+    #{$prop}: getCalc($smallSize, $largeSize, $pxMin, $pxMax) $i;
+  }
+  @media (max-width: $smWidth) {
+    #{$prop}: pixelize($smallSize) $i;
+  }
+}
 
-@mixin piecewise($prop, $smallSize, $largeSize, $pxMin, $pxMax, $i:null){
-    $smWidth: stripUnit($pxMin) * 1px;
-    $lgWidth: stripUnit($pxMax) * 1px;
-    @include breakpoint($lgWidth){
-        #{$prop}: $largeSize * 1px $i;
+@function getCalc($smallSize, $largeSize, $pxMin, $pxMax) {
+  @if (length($smallSize) != length($largeSize)) {
+    @error 'Property values must have the same number of arguments.';
+  }
+  $calcsList: ();
+  @for $i from 1 through length($smallSize) {
+    @if nth($smallSize, $i) != nth($largeSize, $i) {
+      $calcsList: append(
+        $calcsList,
+        calc(
+          #{pixelize(nth($smallSize, $i))} + (100vw - #{pixelize($pxMin)})/#{(
+              $pxMax - $pxMin
+            )/(nth($largeSize, $i) - nth($smallSize, $i))}
+        )
+      );
+    } @else {
+      $calcsList: append($calcsList, pixelize(nth($smallSize, $i)));
     }
-    @include breakpoint(($smWidth $lgWidth)){
-        $small: stripUnit($smallSize);
-        $large: stripUnit($largeSize);
-        #{$prop}: calc(#{$smallSize * 1px} + (100vw - #{$pxMin * 1px})/#{($pxMax - $pxMin)/($largeSize - $smallSize)}) $i;
-    }
-    @include breakpoint((max-width $smWidth)){
-        #{$prop}: $smallSize * 1px $i;
-    }
+  }
+  @return $calcsList;
+}
+
+@function pixelize($list) {
+  $newList: ();
+  @for $i from 1 through length($list) {
+    $newList: append($newList, stripUnit(nth($list, $i)) * 1px);
+  }
+  @return $newList;
 }
 
 @function stripUnit($number) {
-    @if type-of($number) == 'number' and not unitless($number) {
-        @return $number / ($number * 0 + 1);
-    }
-    @return $number;
+  @if type-of($number) == 'number' and not unitless($number) {
+    @return $number / ($number * 0 + 1);
+  }
+  @return $number;
 }
