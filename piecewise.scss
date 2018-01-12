@@ -5,7 +5,11 @@
   $smWidth: pixelize($pxMin);
   $lgWidth: pixelize($pxMax);
   @media (min-width: $lgWidth) {
-    #{$prop}: pixelize($largeSize) $i;
+    @if $pxMin != $pxMax or unitless($largeSize) {
+      #{$prop}: pixelize($largeSize) $i;
+    } @else {
+      #{$prop}: $largeSize $i;
+    }
   }
   @if $pxMin != $pxMax {
     @media (min-width: $smWidth) and (max-width: $lgWidth) {
@@ -13,7 +17,11 @@
     }
   }
   @media (max-width: $smWidth) {
-    #{$prop}: pixelize($smallSize) $i;
+    @if $pxMin != $pxMax or unitless($smallSize) {
+      #{$prop}: pixelize($smallSize) $i;
+    } @else {
+      #{$prop}: $smallSize $i;
+    }
   }
 }
 
