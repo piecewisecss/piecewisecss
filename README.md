@@ -29,7 +29,7 @@ In the example above, the `<h1>` tag will have:
 
 **Use as Breakpoint**
 
-```
+```js
 .class {
     @include piecewise(flex-basis, 100%, 33%, 480);
 }
