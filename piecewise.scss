@@ -59,11 +59,11 @@
   @return $number;
 }
 
-@function listUnitless($list){
-  $truthy: true;
-  @for $i from 1 through length($list){
-    @if not unitless(nth($list, $i)) {
-      $truthy: false;
+@function listUnitless($list) {
+  $truthy: false;
+  @for $i from 1 through length($list) {
+    @if unitless(nth($list, $i)) {
+      $truthy: true;
     }
   }
   @return $truthy;
