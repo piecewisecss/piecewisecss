@@ -3,7 +3,7 @@
     @error 'Property values must have the same number of arguments.';
   }
   @media (min-width: pixelize($pxMax)) {
-    @if $pxMin != $pxMax or unitless($largeSize) {
+    @if $pxMin != $pxMax or listUnitless($largeSize) {
       #{$prop}: pixelize($largeSize) $i;
     } @else {
       #{$prop}: $largeSize $i;
@@ -15,7 +15,7 @@
     }
   }
   @media (max-width: pixelize($pxMin)) {
-    @if $pxMin != $pxMax or unitless($smallSize) {
+    @if $pxMin != $pxMax or listUnitless($smallSize) {
       #{$prop}: pixelize($smallSize) $i;
     } @else {
       #{$prop}: $smallSize $i;
@@ -57,4 +57,14 @@
     @return $number / ($number * 0 + 1);
   }
   @return $number;
+}
+
+@function listUnitless($list){
+  $truthy: true;
+  @for $i from 1 through length($list){
+    @if not unitless(nth($list, $i)) {
+      $truthy: false;
+    }
+  }
+  @return $truthy;
 }
