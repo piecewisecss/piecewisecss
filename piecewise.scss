@@ -34,8 +34,7 @@
         $calcsList,
         calc(#{pixelize(nth($smallSize, $i))} + (100vw - #{pixelize($pxMin)})/#{(
               $pxMax - $pxMin
-            )/(nth($largeSize, $i) - nth($smallSize, $i))}
-        )
+            )/(stripUnit(nth($largeSize, $i)) - stripUnit(nth($smallSize, $i)))})
       );
     } @else {
       $calcsList: append($calcsList, pixelize(nth($smallSize, $i)));
@@ -59,9 +58,9 @@
   @return $number;
 }
 
-@function listUnitless($list) {
+@function listUnitless($list){
   $truthy: false;
-  @for $i from 1 through length($list) {
+  @for $i from 1 through length($list){
     @if unitless(nth($list, $i)) {
       $truthy: true;
     }
