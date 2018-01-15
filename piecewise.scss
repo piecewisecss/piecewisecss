@@ -1,18 +1,7 @@
 @mixin piecewise($prop, $smallSize, $largeSize, $pxMin, $pxMax: $pxMin, $i:null) {
   @if (length($smallSize) != length($largeSize)) {
-    @error 'Property values must have the same number of arguments.';
-  }
-  @media (min-width: pixelize($pxMax)) {
-    @if $pxMin != $pxMax or listUnitless($largeSize) {
-      #{$prop}: pixelize($largeSize) $i;
-    } @else {
-      #{$prop}: $largeSize $i;
-    }
-  }
-  @if $pxMin != $pxMax {
-    @media (min-width: pixelize($pxMin)) and (max-width: pixelize($pxMax)) {
-      #{$prop}: getCalc($smallSize, $largeSize, $pxMin, $pxMax) $i;
-    }
+    $smallSize: nth(normalizeArgs($smallSize, $largeSize), 1);
+    $largeSize: nth(normalizeArgs($smallSize, $largeSize), 2);
   }
   @media (max-width: pixelize($pxMin)) {
     @if $pxMin != $pxMax or listUnitless($smallSize) {
@@ -21,6 +10,39 @@
       #{$prop}: $smallSize $i;
     }
   }
+  @if $pxMin != $pxMax {
+    @media (min-width: pixelize($pxMin)) and (max-width: pixelize($pxMax)) {
+      #{$prop}: getCalc($smallSize, $largeSize, $pxMin, $pxMax) $i;
+    }
+  }
+  @media (min-width: pixelize($pxMax)) {
+    @if $pxMin != $pxMax or listUnitless($largeSize) {
+      #{$prop}: pixelize($largeSize) $i;
+    } @else {
+      #{$prop}: $largeSize $i;
+    }
+  }
+}
+
+@function normalizeArgs($smallSize, $largeSize) {
+  $max: max(length($smallSize), length($largeSize));
+  $smallList: populateArgs($smallSize, $max);
+  $largeList: populateArgs($largeSize, $max);
+  @return ($smallList, $largeList);
+}
+
+@function populateArgs($list, $length) {
+  $newList: (nth($list, 1));
+  @for $i from 2 through $length {
+    @if length($list) >= $i {
+      $newList: append($newList, nth($list, $i));
+    } @else if $i == 4 and length($list) > 1 {
+      $newList: append($newList, nth($list, 2));
+    } @else {
+      $newList: append($newList, nth($list, 1));
+    }
+  }
+  @return $newList;
 }
 
 @function getCalc($smallSize, $largeSize, $pxMin, $pxMax) {
@@ -58,9 +80,9 @@
   @return $number;
 }
 
-@function listUnitless($list){
+@function listUnitless($list) {
   $truthy: false;
-  @for $i from 1 through length($list){
+  @for $i from 1 through length($list) {
     @if unitless(nth($list, $i)) {
       $truthy: true;
     }
