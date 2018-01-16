@@ -4,8 +4,8 @@ PiecewiseCSS makes use of an intuitive responsive design pattern to make writing
 
 `main.scss`
 
-```js
-import '../node_modules/piecewisecss/piecewise.scss';
+```scss
+@import '../node_modules/piecewisecss/piecewise.scss';
 
 h1 {
     @include piecewise(font-size, 24, 48, 480, 1200, !important);
@@ -29,15 +29,19 @@ In the example above, the `<h1>` tag will have:
 
 **Global Breakpoint Variables**
 
-New in **1.4**! Use global variables to keep your breakpoints consistent. Using one or both of the local width arguments will override these.
+New in **1.4**! Use global variables to keep your breakpoints consistent. Using one or both of the local screen width arguments will override these.
 
 `main.scss`
-```js
+
+```scss
 $globalMin: 480px;
 $globalMax: 1000px;
 ```
-`some other file`
-```js
+
+`some-other-file.scss`
+
+```scss
+@import './main.scss';
 .class {
     @include piecewise(padding: 0 5px, 20px);
 }
@@ -45,10 +49,10 @@ $globalMax: 1000px;
 
 **Use as Breakpoint**
 
-```js
+```scss
 .class {
     @include piecewise(flex-basis, 100%, 33%, 480);
 }
 ```
 
-New in **1.2**! The fifth `pxMax` argument is now optional, allowing you to invoke `piecewise()` to apply one-line media queries. In the example above, `flex-basis` will simply flip from `100%` to `33%` at `480px`.
+New in **1.2**! The fifth `$pxMax` argument is now optional, allowing you to invoke `piecewise()` to apply one-line media queries. In the example above, `flex-basis` will simply flip from `100%` to `33%` at `480px`.
