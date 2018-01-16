@@ -38,7 +38,7 @@ $globalMin: 480px;
 $globalMax: 1000px;
 ```
 
-`some-other-file.scss`
+`./some-other-file.scss`
 
 ```scss
 @import './main.scss';
