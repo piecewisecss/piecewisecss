@@ -27,6 +27,22 @@ In the example above, the `<h1>` tag will have:
 * a `font-size` of `48px` at browser width >= `1200px`;
 * between `480px` and `1200px`, the font-size will be scaled linearly with the browser width, resulting in a seamless, gradual breakpoint.
 
+**Global Breakpoint Variables**
+
+New in **1.4**! Use global variables to keep your breakpoints consistent. Using one or both of the local width arguments will override these.
+
+`main.scss`
+```js
+$globalMin: 480px;
+$globalMax: 1000px;
+```
+`some other file`
+```js
+.class {
+    @include piecewise(padding: 0 5px, 20px);
+}
+```
+
 **Use as Breakpoint**
 
 ```js
@@ -35,4 +51,4 @@ In the example above, the `<h1>` tag will have:
 }
 ```
 
-New in 1.2! The fifth `pxMax` argument is now optional, allowing you to invoke `piecewise()` to apply one-line media queries. In the example above, `flex-basis` will simply flip from `100%` to `33%` at `480px`.
+New in **1.2**! The fifth `pxMax` argument is now optional, allowing you to invoke `piecewise()` to apply one-line media queries. In the example above, `flex-basis` will simply flip from `100%` to `33%` at `480px`.

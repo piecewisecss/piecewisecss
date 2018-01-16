@@ -1,4 +1,21 @@
-@mixin piecewise($prop, $smallSize, $largeSize, $pxMin, $pxMax: $pxMin, $i:null) {
+@mixin piecewise($prop, $smallSize, $largeSize, $pxMin:null, $pxMax:null, $i:null) {
+  @if $pxMax == null {
+    @if $pxMin == null and global-variable-exists(globalMax) {
+      $pxMax: stripUnit($globalMax);
+    } @else if variable-exists(pxMin){
+       $pxMax: stripUnit($pxMin);
+     } @else {
+        @error 'Was expecting `$globalMax` to be defined.';
+     }
+  }
+  @if $pxMin == null {
+    @if global-variable-exists(globalMin){
+      $pxMin: stripUnit($globalMin);
+    } @else {
+      @error 'Was expecting `$globalMin` to be defined.';
+    }
+  }
+  
   @media (max-width: pixelize($pxMin)) {
     @if $pxMin != $pxMax or listUnitless($smallSize) {
       #{$prop}: pixelize($smallSize) $i;
