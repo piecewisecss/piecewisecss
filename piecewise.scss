@@ -45,12 +45,21 @@
   $calcsList: ();
   @for $i from 1 through length($smallSize) {
     @if nth($smallSize, $i) != nth($largeSize, $i) {
-      $calcsList: append(
-        $calcsList,
-        calc(#{pixelize(nth($smallSize, $i))} + (100vw - #{pixelize($pxMin)})/#{(
-              $pxMax - $pxMin
-            )/(stripUnit(nth($largeSize, $i)) - stripUnit(nth($smallSize, $i)))})
-      );
+      @if stripUnit(nth($smallSize, $i)) != 0 {
+        $calcsList: append(
+          $calcsList,
+          calc(#{pixelize(nth($smallSize, $i))} + (100vw - #{pixelize($pxMin)})/#{(
+                $pxMax - $pxMin
+              )/(stripUnit(nth($largeSize, $i)) - stripUnit(nth($smallSize, $i)))})
+        );
+      } @else {
+        $calcsList: append(
+          $calcsList,
+          calc((100vw - #{pixelize($pxMin)})/#{(
+                $pxMax - $pxMin
+              )/(stripUnit(nth($largeSize, $i)) - stripUnit(nth($smallSize, $i)))})
+        );
+      }
     } @else {
       $calcsList: append($calcsList, pixelize(nth($smallSize, $i)));
     }
