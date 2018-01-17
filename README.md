@@ -29,7 +29,7 @@ In the example above, the `<h1>` tag will have:
 
 **Global Breakpoint Variables**
 
-New in **1.4**! Use global variables to keep your breakpoints consistent. Using one or both of the local screen width arguments will override these.
+**New in 1.4:**! Use global variables to keep your breakpoints consistent. Using one or both of the local screen width arguments will override these.
 
 `main.scss`
 
@@ -55,6 +55,21 @@ $globalMax: 1000px;
 }
 ```
 
-New in **1.2**! The fifth `$pxMax` argument is now optional, allowing you to invoke `piecewise()` to apply one-line media queries. In the example above, `flex-basis` will simply flip from `100%` to `33%` at `480px`.
+**New in 1.2:**! The fifth `$pxMax` argument is now optional, allowing you to invoke `piecewise()` to apply one-line media queries. In the example above, `flex-basis` will simply flip from `100%` to `33%` at `480px`.
 
 Note this is the only use of `piecewise()` that supports non-`px` values.
+
+**@inversePiecewise()**
+
+**New in 1.5:** The @mixin `inversePiecewise()` provides you with the inverse value (100% - that value) of what `piecewise()` provides you. Say you want control of two divs that split the width of a parent:
+
+```scss
+.sidebar {
+    @include piecewise(width, 97, 118, 480, 1000, !important);
+}
+.window {
+    @include inversePiecewise(width, 97, 118, 480, 1000, !important);
+}
+```
+
+In this example, `.sidebar` will adjust its width from `97px` to `118px` from view-widths `480px` to `1000px`, and the `.window` element will occupy the rest of the remaining space.
