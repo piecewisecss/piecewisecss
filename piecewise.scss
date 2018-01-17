@@ -25,7 +25,7 @@
   }
   @if $pxMin != $pxMax {
     @media (min-width: pixelize($pxMin)) and (max-width: pixelize($pxMax)) {
-      #{$prop}: getCalcs($smallSize, $largeSize, $pxMin, $pxMax) $i;
+      #{$prop}: getCalc($smallSize, $largeSize, $pxMin, $pxMax) $i;
     }
   }
   @media (min-width: pixelize($pxMax)) {
@@ -37,7 +37,7 @@
   }
 }
 
-@function getCalcs($smallSize, $largeSize, $pxMin, $pxMax) {
+@function getCalc($smallSize, $largeSize, $pxMin, $pxMax) {
   @if (length($smallSize) != length($largeSize)) {
     $smallSize: nth(normalizeArgs($smallSize, $largeSize), 1);
     $largeSize: nth(normalizeArgs($smallSize, $largeSize), 2);
@@ -45,44 +45,26 @@
   $calcsList: ();
   @for $i from 1 through length($smallSize) {
     @if nth($smallSize, $i) != nth($largeSize, $i) {
-      $calcsList: append(
-        $calcsList,
-        calc(#{getCalc(nth($smallSize, $i), nth($largeSize, $i), $pxMin, $pxMax)})
-      );
+      @if stripUnit(nth($smallSize, $i)) != 0 {
+        $calcsList: append(
+          $calcsList,
+          calc(#{pixelize(nth($smallSize, $i))} + (100vw - #{pixelize($pxMin)})/#{(
+                $pxMax - $pxMin
+              )/(stripUnit(nth($largeSize, $i)) - stripUnit(nth($smallSize, $i)))})
+        );
+      } @else {
+        $calcsList: append(
+          $calcsList,
+          calc((100vw - #{pixelize($pxMin)})/#{(
+                $pxMax - $pxMin
+              )/(stripUnit(nth($largeSize, $i)) - stripUnit(nth($smallSize, $i)))})
+        );
+      }
     } @else {
       $calcsList: append($calcsList, pixelize(nth($smallSize, $i)));
     }
   }
   @return $calcsList;
-}
-
-@function getCalc($smallSize, $largeSize, $pxMin:null, $pxMax:null){
-  @if $pxMax == null {
-    @if $pxMin == null and global-variable-exists(globalMax) {
-      $pxMax: stripUnit($globalMax);
-    } @else if variable-exists(pxMin){
-       $pxMax: stripUnit($pxMin);
-     } @else {
-        @error 'Was expecting `$globalMax` to be defined.';
-     }
-  }
-  @if $pxMin == null {
-    @if global-variable-exists(globalMin){
-      $pxMin: stripUnit($globalMin);
-    } @else {
-      @error 'Was expecting `$globalMin` to be defined.';
-    }
-  }
-  
-  @if stripUnit($smallSize) != 0 {
-    @return #{pixelize($smallSize)} + (100vw - #{pixelize($pxMin)})/#{(
-            $pxMax - $pxMin
-          )/(stripUnit($largeSize) - stripUnit($smallSize))};
-  } @else {
-    @return (100vw - #{pixelize($pxMin)})/#{(
-            $pxMax - $pxMin
-          )/(stripUnit($largeSize) - stripUnit($smallSize))};
-  }
 }
 
 @function normalizeArgs($smallSize, $largeSize){
