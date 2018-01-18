@@ -49,7 +49,7 @@ $globalMax: 1000px;
 
 ## **Use as Breakpoint**
 
-**New in 1.2:** The fifth `$pxMax` argument is now optional, allowing you to invoke `piecewise()` to apply one-line media queries. In the example above, `flex-basis` will simply flip from `100%` to `33%` at `480px`.
+**New in 1.2:** Invoke `piecewise()` to apply one-line media queries. In the example below, `flex-basis` will simply flip from `100%` to `33%` at `480px`.
 
 ```scss
 .class {
@@ -58,7 +58,7 @@ $globalMax: 1000px;
 }
 ```
 
-Note this is the only mode of `piecewise()` that supports non-`px` or string values.
+Note this is the only mode of `piecewise()` that supports non-`px` and string values.
 
 ## **@inversePiecewise()**
 
@@ -66,11 +66,11 @@ Note this is the only mode of `piecewise()` that supports non-`px` or string val
 
 ```scss
 .sidebar {
-    @include piecewise(width, 97, 118, 480, 1000);
+    @include piecewise(width, 100, 120, 480, 1000);
 }
 .window {
-    @include inversePiecewise(width, 97, 118, 480, 1000);
+    @include inversePiecewise(width, 100, 120, 480, 1000);
 }
 ```
 
-In this example, `.sidebar` will adjust its width from `97px` to `118px` from view-widths `480px` to `1000px`, and the `.window` element will occupy the rest of the remaining space.
+In this example, `.sidebar` will adjust its width from `100px` to `120px` from view-widths `480px` to `1000px`, and the `.window` element will occupy the rest of the remaining space.
