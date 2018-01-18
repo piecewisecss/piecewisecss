@@ -52,12 +52,13 @@ $globalMax: 1000px;
 ```scss
 .class {
     @include piecewise(flex-basis, 100%, 33%, 480);
+    @include piecewise(flex-direction, column, row);
 }
 ```
 
 **New in 1.2:** The fifth `$pxMax` argument is now optional, allowing you to invoke `piecewise()` to apply one-line media queries. In the example above, `flex-basis` will simply flip from `100%` to `33%` at `480px`.
 
-Note this is the only use of `piecewise()` that supports non-`px` values.
+Note this is the only mode of `piecewise()` that supports non-`px` or string values.
 
 **@inversePiecewise()**
 

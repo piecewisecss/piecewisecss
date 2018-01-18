@@ -1,4 +1,5 @@
 @mixin piecewise($prop, $smallSize, $largeSize, $pxMin:null, $pxMax:null, $i:null) {
+  
   @if $pxMax == null {
     @if $pxMin == null and global-variable-exists(globalMax) {
       $pxMax: stripUnit($globalMax);
@@ -17,7 +18,7 @@
   }
   
   @media (max-width: pixelize($pxMin)) {
-    @if $pxMin != $pxMax or listUnitless($smallSize) {
+    @if $pxMin != $pxMax or (type-of($largeSize) == number and listUnitless($smallSize)) {
       #{$prop}: pixelize($smallSize) $i;
     } @else {
       #{$prop}: $smallSize $i;
@@ -29,7 +30,7 @@
     }
   }
   @media (min-width: pixelize($pxMax)) {
-    @if $pxMin != $pxMax or listUnitless($largeSize) {
+    @if $pxMin != $pxMax or (type-of($largeSize) == number and listUnitless($largeSize)) {
       #{$prop}: pixelize($largeSize) $i;
     } @else {
       #{$prop}: $largeSize $i;
