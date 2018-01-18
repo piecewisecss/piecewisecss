@@ -1,5 +1,5 @@
-@mixin piecewise($prop, $smallSize, $largeSize, $pxMin:null, $pxMax:null, $i:null) {
-  
+@mixin piecewise($prop, $smallSize, $largeSize, $pxMin:null, $pxMax:null, $important:null) {
+  $important: unquote($important);
   @if $pxMax == null {
     @if $pxMin == null and global-variable-exists(globalMax) {
       $pxMax: stripUnit($globalMax);
@@ -19,21 +19,21 @@
   
   @media (max-width: pixelize($pxMin)) {
     @if $pxMin != $pxMax or (type-of($largeSize) == number and listUnitless($smallSize)) {
-      #{$prop}: pixelize($smallSize) $i;
+      #{$prop}: pixelize($smallSize) $important;
     } @else {
-      #{$prop}: $smallSize $i;
+      #{$prop}: $smallSize $important;
     }
   }
   @if $pxMin != $pxMax {
     @media (min-width: pixelize($pxMin)) and (max-width: pixelize($pxMax)) {
-      #{$prop}: getCalcs($smallSize, $largeSize, $pxMin, $pxMax) $i;
+      #{$prop}: getCalcs($smallSize, $largeSize, $pxMin, $pxMax) $important;
     }
   }
   @media (min-width: pixelize($pxMax)) {
     @if $pxMin != $pxMax or (type-of($largeSize) == number and listUnitless($largeSize)) {
-      #{$prop}: pixelize($largeSize) $i;
+      #{$prop}: pixelize($largeSize) $important;
     } @else {
-      #{$prop}: $largeSize $i;
+      #{$prop}: $largeSize $important;
     }
   }
 }

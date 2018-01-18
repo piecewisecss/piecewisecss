@@ -1,4 +1,4 @@
-**Media Queries Made Simple**
+## **Seamless Media Queries Made Simple**
 
 PiecewiseCSS makes use of an intuitive responsive design pattern to make writing Sass for all screen sizes fast and easy.
 
@@ -27,7 +27,7 @@ In the example above, the `<h1>` tag will have:
 * a `font-size` of `48px` at browser width >= `1200px`;
 * between `480px` and `1200px`, the font-size will be scaled linearly with the browser width, resulting in a seamless, gradual breakpoint.
 
-**Global Breakpoint Variables**
+## **Global Breakpoint Variables**
 
 **New in 1.4:** Use global variables to keep your breakpoints consistent. Using one or both of the local screen width arguments will override these.
 
@@ -47,7 +47,7 @@ $globalMax: 1000px;
 }
 ```
 
-**Use as Breakpoint**
+## **Use as Breakpoint**
 
 ```scss
 .class {
@@ -60,7 +60,7 @@ $globalMax: 1000px;
 
 Note this is the only mode of `piecewise()` that supports non-`px` or string values.
 
-**@inversePiecewise()**
+## **@inversePiecewise()**
 
 **New in 1.5:** The @mixin `inversePiecewise()` provides you with the inverse value (100% - that value) of what `piecewise()` provides you. Say you want control of two divs that split the width of a parent:
 
