@@ -45,10 +45,17 @@
   }
   $calcsList: ();
   @for $i from 1 through length($smallSize) {
-    $calcsList: append(
-      $calcsList,
-      calc(#{getCalc(nth($smallSize, $i), nth($largeSize, $i), $pxMin, $pxMax)})
-    );
+    @if nth($smallSize, $i) != nth($largeSize, $i) {
+      $calcsList: append(
+        $calcsList,
+        calc(#{getCalc(nth($smallSize, $i), nth($largeSize, $i), $pxMin, $pxMax)})
+      );
+    } @else {
+       $calcsList: append(
+        $calcsList,
+        pixelize(nth($smallSize, $i))
+      );
+    }
   }
   @return $calcsList;
 }
