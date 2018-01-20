@@ -49,12 +49,12 @@ $globalMax: 1000px;
 
 ## **Use as Breakpoint**
 
-**New in 1.2:** Invoke `piecewise()` to apply one-line media queries. In the example below, `flex-basis` will simply flip from `100%` to `33%` at `480px`.
+**New in 1.2:** Invoke `piecewise()` to apply one-line media queries by using only the `pxMin` argument. In the example below, `flex-basis` will simply flip from `100%` to `33%` at `480px`.
 
 ```scss
 .class {
     @include piecewise(flex-basis, 100%, 33%, 480);
-    @include piecewise(flex-direction, column, row);
+    @include piecewise(flex-direction, column, row, 480);
 }
 ```
 
