@@ -1,6 +1,6 @@
 {
   "name": "piecewisecss",
-  "version": "1.6.4",
+  "version": "1.6.5",
   "description": "A SCSS @mixin for easy implementation of dynamic breakpoints.",
   "main": "piecewise.scss",
   "scripts": {
