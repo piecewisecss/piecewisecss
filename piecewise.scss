@@ -18,7 +18,7 @@
   }
   
   @media (max-width: pixelize($pxMin)) {
-    @if $pxMin != $pxMax or (type-of($largeSize) == number and listUnitless($smallSize)) {
+    @if $pxMin != $pxMax or (type-of($smallSize) == number and listUnitless($smallSize)) {
       #{$prop}: pixelize($smallSize) $important;
     } @else {
       #{$prop}: $smallSize $important;
