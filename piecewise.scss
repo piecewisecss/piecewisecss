@@ -1,45 +1,3 @@
-@mixin piecewise($prop, $smallSize, $largeSize, $pxMin:null, $pxMax:null, $important:null) {
-  @if $important != null {
-    $important: unquote($important);
-  }
-  @if $pxMax == null {
-    @if $pxMin == null and global-variable-exists(globalMax) {
-      $pxMax: stripUnit($globalMax);
-    } @else if variable-exists(pxMin){
-       $pxMax: stripUnit($pxMin);
-     } @else {
-        @error 'Was expecting `$globalMax` to be defined.';
-     }
-  }
-  @if $pxMin == null {
-    @if global-variable-exists(globalMin){
-      $pxMin: stripUnit($globalMin);
-    } @else {
-      @error 'Was expecting `$globalMin` to be defined.';
-    }
-  }
-  
-  @media (max-width: pixelize($pxMin)) {
-    @if $pxMin != $pxMax or (type-of($smallSize) == number and listUnitless($smallSize)) {
-      #{$prop}: pixelize($smallSize) $important;
-    } @else {
-      #{$prop}: $smallSize $important;
-    }
-  }
-  @if $pxMin != $pxMax {
-    @media (min-width: pixelize($pxMin)) and (max-width: pixelize($pxMax)) {
-      #{$prop}: getCalcs($smallSize, $largeSize, $pxMin, $pxMax) $important;
-    }
-  }
-  @media (min-width: pixelize($pxMax)) {
-    @if $pxMin != $pxMax or (type-of($largeSize) == number and listUnitless($largeSize)) {
-      #{$prop}: pixelize($largeSize) $important;
-    } @else {
-      #{$prop}: $largeSize $important;
-    }
-  }
-}
-
 @function getCalcs($smallSize, $largeSize, $pxMin, $pxMax) {
   @if (length($smallSize) != length($largeSize)) {
     $smallSize: nth(normalizeArgs($smallSize, $largeSize), 1);
@@ -47,15 +5,12 @@
   }
   $calcsList: ();
   @for $i from 1 through length($smallSize) {
-    @if nth($smallSize, $i) != nth($largeSize, $i) {
+    @if nth($smallSize, $i) == nth($largeSize, $i) {
+      $calcsList: append($calcsList, pixelize(nth($smallSize, $i)));
+    } @else {
       $calcsList: append(
         $calcsList,
         calc(#{getCalc(nth($smallSize, $i), nth($largeSize, $i), $pxMin, $pxMax)})
-      );
-    } @else {
-       $calcsList: append(
-        $calcsList,
-        pixelize(nth($smallSize, $i))
       );
     }
   }
@@ -119,7 +74,11 @@
 @function pixelize($list) {
   $newList: ();
   @for $i from 1 through length($list) {
-    $newList: append($newList, stripUnit(nth($list, $i)) * 1px);
+    @if type-of(nth($list, $i)) == number {
+      $newList: append($newList, stripUnit(nth($list, $i)) * 1px);
+    } @else {
+      $newList: append($newList, (nth($list, $i)));
+    }
   }
   @return $newList;
 }
@@ -177,5 +136,54 @@
     } @else {
       #{$prop}: calc(100% - $largeSize) $i;
     }
+  }
+}
+
+@mixin piecewise($prop, $smallSize, $largeSize, $pxMin:null, $pxMax:null, $important:null, $imp2:null) {
+  @if $pxMax == null {
+    @if $pxMin == null and global-variable-exists(globalMax) {
+      $pxMax: stripUnit($globalMax);
+    } @else if variable-exists(pxMin){
+      $pxMax: stripUnit($pxMin);
+    } @else {
+        @error 'Was expecting `$globalMax` to be defined.';
+    }
+  }
+  @if $pxMin == null {
+    @if global-variable-exists(globalMin){
+      $pxMin: stripUnit($globalMin);
+    } @else {
+      @error 'Was expecting `$globalMin` to be defined.';
+    }
+  }
+  
+  @if type-of($important) != number {
+    @media (max-width: pixelize($pxMin)) {
+      #{$prop}: pixelize($smallSize) $important;
+    }
+    @if $pxMin != $pxMax {
+      @media (min-width: pixelize($pxMin)) and (max-width: pixelize($pxMax)) {
+        #{$prop}: getCalcs($smallSize, $largeSize, $pxMin, $pxMax) $important;
+      }
+    }
+    @media (min-width: pixelize($pxMax)) {
+      #{$prop}: pixelize($largeSize) $important;
+    }
+  } @else {
+    @include doublePiecewise($prop, $smallSize, $largeSize, $pxMin, $pxMax, $important);
+  }
+}
+
+@mixin doublePiecewise($prop, $smallVal, $midVal, $largeVal, $pxMin, $pxMax, $important:null){
+  @media (max-width: pixelize($pxMin)) {
+    #{$prop}: pixelize($smallVal) $important;
+  }
+  @if $pxMin != $pxMax {
+    @media (min-width: pixelize($pxMin)) and (max-width: pixelize($pxMax)) {
+        #{$prop}: pixelize($midVal);
+    }
+  }
+  @media (min-width: pixelize($pxMax)) {
+    #{$prop}: pixelize($largeVal) $important;
   }
 }

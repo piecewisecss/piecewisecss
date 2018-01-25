@@ -74,3 +74,13 @@ Note this is the only mode of `piecewise()` that supports non-`px` and string va
 ```
 
 In this example, `.sidebar` will adjust its width from `100px` to `120px` from view-widths `480px` to `1000px`, and the `.window` element will occupy the rest of the remaining space.
+
+## On, Off, On Again ##
+
+**New in 1.7:** Invoke `piecewise()` to set three values at two breakpoints:
+
+```scss
+@include piecewise(display, none, inline, none, 650, 1000);
+```
+
+This element will be displayed inline between `650px` and `1000px`, and disappear otherwise.
