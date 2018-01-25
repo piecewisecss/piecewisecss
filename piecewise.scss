@@ -1,5 +1,7 @@
 @mixin piecewise($prop, $smallSize, $largeSize, $pxMin:null, $pxMax:null, $important:null) {
-  $important: unquote($important);
+  @if $important != null {
+    $important: unquote($important);
+  }
   @if $pxMax == null {
     @if $pxMin == null and global-variable-exists(globalMax) {
       $pxMax: stripUnit($globalMax);
