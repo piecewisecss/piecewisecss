@@ -101,34 +101,42 @@
 }
 
 @mixin piecewise($prop, $smallSize, $largeSize, $pxMin:null, $pxMax:null, $important:null, $imp2:null) {
-  @if type-of($important) != number {
-    @if $pxMax == null {
-      @if $pxMin == null and global-variable-exists(globalMax) {
-        $pxMax: stripUnit($globalMax);
-      } @else if variable-exists(pxMin) {
-        $pxMax: stripUnit($pxMin);
-      } @else {
-        @error 'Was expecting `$globalMax` to be defined.';
-      }
+  @if $pxMax == null {
+    @if $pxMin == null and global-variable-exists(globalMax) {
+      $pxMax: stripUnit($globalMax);
+    } @else if variable-exists(pxMin) {
+      $pxMax: stripUnit($pxMin);
+    } @else {
+      @error 'Was expecting `$globalMax` to be defined.';
     }
-    @if $pxMin == null {
-      @if global-variable-exists(globalMin) {
-        $pxMin: stripUnit($globalMin);
-      } @else {
-        @error 'Was expecting `$globalMin` to be defined.';
-      }
+  }
+  @if $pxMin == null {
+    @if global-variable-exists(globalMin) {
+      $pxMin: stripUnit($globalMin);
+    } @else {
+      @error 'Was expecting `$globalMin` to be defined.';
     }
+  }
 
+  @if type-of($important) != number {
     @media (max-width: pixelize($pxMin)) {
-      #{$prop}: pixelize($smallSize) $important;
+      @if $pxMin != $pxMax or listUnitless($smallSize) {
+        #{$prop}: pixelize($smallSize) $important;
+      } @else {
+        #{$prop}: $smallSize $important;
+      }
     }
     @if $pxMin != $pxMax and isListNumbers($smallSize) and isListNumbers($largeSize) {
       @media (min-width: pixelize($pxMin)) and (max-width: pixelize($pxMax)) {
         #{$prop}: getCalcs($smallSize, $largeSize, $pxMin, $pxMax) $important;
       }
     }
-    @media (min-width: pixelize($pxMax)) {
-      #{$prop}: pixelize($largeSize) $important;
+    @media (max-width: pixelize($pxMax)) {
+      @if $pxMin != $pxMax or listUnitless($largeSize) {
+        #{$prop}: pixelize($largeSize) $important;
+      } @else {
+        #{$prop}: $largeSize $important;
+      }
     }
   } @else {
     @include doublePiecewise($prop, $smallSize, $largeSize, $pxMin, $pxMax, $important, $imp2);
