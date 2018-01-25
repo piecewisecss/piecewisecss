@@ -27,15 +27,18 @@
 }
 
 @function stripUnit($number) {
-  @if type-of($number) == number and not unitless($number) {
+  @if type-of($number) != number {
+    @return $number;
+  }
+  @if not unitless($number) {
     @return $number / ($number * 0 + 1);
   }
   @return $number;
 }
 
-@function listUnitless($list) {
-  @for $i from 1 through length($list) {
-    @if unitless(nth($list, $i)) {
+@function listUnitless($list){
+  @each $ele in $list{
+    @if  unitless($ele) {
       @return true;
     }
   }
@@ -119,8 +122,9 @@
   }
 
   @if type-of($important) != number {
+    $important: unquote($important);
     @media (max-width: pixelize($pxMin)) {
-      @if $pxMin != $pxMax or listUnitless($smallSize) {
+      @if $pxMin != $pxMax or (type-of($smallSize) == number and listUnitless($smallSize)) {
         #{$prop}: pixelize($smallSize) $important;
       } @else {
         #{$prop}: $smallSize $important;
@@ -131,8 +135,8 @@
         #{$prop}: getCalcs($smallSize, $largeSize, $pxMin, $pxMax) $important;
       }
     }
-    @media (max-width: pixelize($pxMax)) {
-      @if $pxMin != $pxMax or listUnitless($largeSize) {
+    @media (min-width: pixelize($pxMax)) {
+      @if $pxMin != $pxMax or (type-of($largeSize) == number and listUnitless($largeSize)) {
         #{$prop}: pixelize($largeSize) $important;
       } @else {
         #{$prop}: $largeSize $important;
@@ -176,7 +180,7 @@
   }
 
   @media (max-width: pixelize($pxMin)) {
-    @if $pxMin != $pxMax or listUnitless($smallSize) {
+    @if $pxMin != $pxMax or (type-of($smallSize) == number and listUnitless($smallSize)) {
       #{$prop}: calc(100% - #{pixelize($smallSize)}) $i;
     } @else {
       #{$prop}: calc(100% - $smallSize) $i;
@@ -189,7 +193,7 @@
     }
   }
   @media (min-width: pixelize($pxMax)) {
-    @if $pxMin != $pxMax or listUnitless($largeSize) {
+    @if $pxMin != $pxMax or (type-of($largeSize) == number and listUnitless($largeSize)) {
       #{$prop}: calc(100% - #{pixelize($largeSize)}) $i;
     } @else {
       #{$prop}: calc(100% - $largeSize) $i;
