@@ -91,13 +91,12 @@
 }
 
 @function listUnitless($list){
-  $truthy: false;
   @for $i from 1 through length($list){
     @if unitless(nth($list, $i)) {
-      $truthy: true;
+      @return true;
     }
   }
-  @return $truthy;
+  @return false;
 }
 
 @mixin inversePiecewise($prop, $smallSize, $largeSize, $pxMin:null, $pxMax:null, $i:null) {
@@ -139,6 +138,15 @@
   }
 }
 
+@function isListNumbers($list){
+  @each $ele in $list {
+    @if type-of($ele) != number {
+      @return false;
+    }
+  }
+  @return true;
+}
+
 @mixin piecewise($prop, $smallSize, $largeSize, $pxMin:null, $pxMax:null, $important:null, $imp2:null) {
   @if $pxMax == null {
     @if $pxMin == null and global-variable-exists(globalMax) {
@@ -161,7 +169,7 @@
     @media (max-width: pixelize($pxMin)) {
       #{$prop}: pixelize($smallSize) $important;
     }
-    @if $pxMin != $pxMax {
+    @if $pxMin != $pxMax and isListNumbers($smallSize) and isListNumbers($largeSize) {
       @media (min-width: pixelize($pxMin)) and (max-width: pixelize($pxMax)) {
         #{$prop}: getCalcs($smallSize, $largeSize, $pxMin, $pxMax) $important;
       }
@@ -170,7 +178,7 @@
       #{$prop}: pixelize($largeSize) $important;
     }
   } @else {
-    @include doublePiecewise($prop, $smallSize, $largeSize, $pxMin, $pxMax, $important);
+    @include doublePiecewise($prop, $smallSize, $largeSize, $pxMin, $pxMax, $important, $imp2);
   }
 }
 
