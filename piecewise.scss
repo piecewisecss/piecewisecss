@@ -122,7 +122,9 @@
   }
 
   @if type-of($important) != number {
-    $important: unquote($important);
+    @if $important != null {
+      $important: unquote($important);
+    }
     @media (max-width: pixelize($pxMin)) {
       @if $pxMin != $pxMax or (type-of($smallSize) == number and listUnitless($smallSize)) {
         #{$prop}: pixelize($smallSize) $important;
