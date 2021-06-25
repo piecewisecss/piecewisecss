@@ -20,7 +20,7 @@
     @if type-of(nth($list, $i)) == number {
       $newList: append($newList, stripUnit(nth($list, $i)) * 1px);
     } @else {
-      $newList: append($newList,  (nth($list, $i)));
+      $newList: append($newList, (nth($list, $i)));
     }
   }
   @return $newList;
@@ -36,9 +36,9 @@
   @return $number;
 }
 
-@function listUnitless($list){
-  @each $ele in $list{
-    @if  unitless($ele) {
+@function listUnitless($list) {
+  @each $ele in $list {
+    @if unitless($ele) {
       @return true;
     }
   }
@@ -58,14 +58,16 @@
     } @else {
       $calcsList: append(
         $calcsList,
-        calc(#{getCalc(nth($smallSize, $i), nth($largeSize, $i), $pxMin, $pxMax)})
+        calc(
+          #{getCalc(nth($smallSize, $i), nth($largeSize, $i), $pxMin, $pxMax)}
+        )
       );
     }
   }
   @return $calcsList;
 }
 
-@function getCalc($smallSize, $largeSize, $pxMin:null, $pxMax:null) {
+@function getCalc($smallSize, $largeSize, $pxMin: null, $pxMax: null) {
   @if $pxMax == null {
     @if $pxMin == null and global-variable-exists(globalMax) {
       $pxMax: stripUnit($globalMax);
@@ -85,9 +87,12 @@
 
   @if $smallSize != $largeSize {
     @if stripUnit($smallSize) != 0 {
-      @return #{pixelize($smallSize)} + #{'('}100vw - #{pixelize($pxMin)}#{')'}/#{($pxMax - $pxMin)/(stripUnit($largeSize) - stripUnit($smallSize))};
+      @return #{pixelize($smallSize)} + #{" + ("}100vw "-" #{pixelize($pxMin)}#{")"}/#{(
+          $pxMax - $pxMin
+        ) / (stripUnit($largeSize) - stripUnit($smallSize))};
     } @else {
-      @return #{#{'(100vw'} - #{pixelize($pxMin)}#{')'}/#{($pxMax - $pxMin)/(stripUnit($largeSize) - stripUnit($smallSize))}};
+      @return #{#{"(100vw"}"-" #{pixelize($pxMin)}#{")"}/#{($pxMax - $pxMin) /
+        (stripUnit($largeSize) - stripUnit($smallSize))}};
     }
   } @else {
     @return pixelize($smallSize);
@@ -103,7 +108,15 @@
   @return true;
 }
 
-@mixin piecewise($prop, $smallSize, $largeSize, $pxMin:null, $pxMax:null, $important:null, $imp2:null) {
+@mixin piecewise(
+  $prop,
+  $smallSize,
+  $largeSize,
+  $pxMin: null,
+  $pxMax: null,
+  $important: null,
+  $imp2: null
+) {
   @if $pxMax == null {
     @if $pxMin == null and global-variable-exists(globalMax) {
       $pxMax: stripUnit($globalMax);
@@ -126,30 +139,56 @@
       $important: unquote($important);
     }
     @media (max-width: pixelize($pxMin)) {
-      @if $pxMin != $pxMax or (type-of($smallSize) == number and listUnitless($smallSize)) {
+      @if $pxMin !=
+        $pxMax or
+        (type-of($smallSize) == number and listUnitless($smallSize))
+      {
         #{$prop}: pixelize($smallSize) $important;
       } @else {
         #{$prop}: $smallSize $important;
       }
     }
-    @if $pxMin != $pxMax and isListNumbers($smallSize) and isListNumbers($largeSize) {
+    @if $pxMin !=
+      $pxMax and
+      isListNumbers($smallSize) and
+      isListNumbers($largeSize)
+    {
       @media (min-width: pixelize($pxMin)) and (max-width: pixelize($pxMax)) {
         #{$prop}: getCalcs($smallSize, $largeSize, $pxMin, $pxMax) $important;
       }
     }
     @media (min-width: pixelize($pxMax)) {
-      @if $pxMin != $pxMax or (type-of($largeSize) == number and listUnitless($largeSize)) {
+      @if $pxMin !=
+        $pxMax or
+        (type-of($largeSize) == number and listUnitless($largeSize))
+      {
         #{$prop}: pixelize($largeSize) $important;
       } @else {
         #{$prop}: $largeSize $important;
       }
     }
   } @else {
-    @include doublePiecewise($prop, $smallSize, $largeSize, $pxMin, $pxMax, $important, $imp2);
+    @include doublePiecewise(
+      $prop,
+      $smallSize,
+      $largeSize,
+      $pxMin,
+      $pxMax,
+      $important,
+      $imp2
+    );
   }
 }
 
-@mixin doublePiecewise($prop, $smallVal, $midVal, $largeVal, $pxMin, $pxMax, $important:null) {
+@mixin doublePiecewise(
+  $prop,
+  $smallVal,
+  $midVal,
+  $largeVal,
+  $pxMin,
+  $pxMax,
+  $important: null
+) {
   @media (max-width: pixelize($pxMin)) {
     #{$prop}: pixelize($smallVal) $important;
   }
@@ -163,7 +202,14 @@
   }
 }
 
-@mixin inversePiecewise($prop, $smallSize, $largeSize, $pxMin:null, $pxMax:null, $i:null) {
+@mixin inversePiecewise(
+  $prop,
+  $smallSize,
+  $largeSize,
+  $pxMin: null,
+  $pxMax: null,
+  $i: null
+) {
   @if $pxMax == null {
     @if $pxMin == null and global-variable-exists(globalMax) {
       $pxMax: stripUnit($globalMax);
@@ -182,7 +228,10 @@
   }
 
   @media (max-width: pixelize($pxMin)) {
-    @if $pxMin != $pxMax or (type-of($smallSize) == number and listUnitless($smallSize)) {
+    @if $pxMin !=
+      $pxMax or
+      (type-of($smallSize) == number and listUnitless($smallSize))
+    {
       #{$prop}: calc(100% - #{pixelize($smallSize)}) $i;
     } @else {
       #{$prop}: calc(100% - $smallSize) $i;
@@ -190,12 +239,17 @@
   }
   @if $pxMin != $pxMax {
     @media (min-width: pixelize($pxMin)) and (max-width: pixelize($pxMax)) {
-      #{$prop}: calc(100% - #{'('}#{getCalc($smallSize, $largeSize, $pxMin, $pxMax)}#{')'})
+      #{$prop}: calc(
+          100% - #{"("}#{getCalc($smallSize, $largeSize, $pxMin, $pxMax)}#{")"}
+        )
         $i;
     }
   }
   @media (min-width: pixelize($pxMax)) {
-    @if $pxMin != $pxMax or (type-of($largeSize) == number and listUnitless($largeSize)) {
+    @if $pxMin !=
+      $pxMax or
+      (type-of($largeSize) == number and listUnitless($largeSize))
+    {
       #{$prop}: calc(100% - #{pixelize($largeSize)}) $i;
     } @else {
       #{$prop}: calc(100% - $largeSize) $i;
